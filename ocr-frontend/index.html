@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Aidocspro OCR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input[type="file"],
+    select {
+      width: 100%;
+      padding: 0.5rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #0066e0;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0052b3;
+    }
+
+    .output {
+      background: white;
+      padding: 1.5rem;
+      border-left: 4px solid #007bff;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .error {
+      border-left-color: red;
+    }
+
+    .error h3 {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Aidocspro OCR</h1>
+
+  <div class="form-card">
+    <div class="form-group">
+      <label for="file">Vyber súbor (obrázok alebo PDF):</label>
+      <input type="file" id="file" />
+    </div>
+
+    <div class="form-group">
+      <label for="language">Jazyk OCR:</label>
+      <select id="language">
+        <option value="slk">Slovenčina</option>
+        <option value="eng">Angličtina</option>
+        <option value="deu">Nemčina</option>
+        <option value="fra">Francúzština</option>
+        <option value="spa">Španielčina</option>
+      </select>
+    </div>
+
+    <button onclick="submitOcr()">Spustiť OCR</button>
+  </div>
+
+  <div id="result" class="output" style="display: none;"></div>
+
+  <script>
+    async function submitOcr() {
+      const fileInput = document.getElementById("file");
+      const lang = document.getElementById("language").value;
+      const resultBox = document.getElementById("result");
+      resultBox.style.display = "block";
+      resultBox.classList.remove("error");
+      resultBox.innerHTML = "⏳ Spracúvam...";
+
+      if (!fileInput.files.length) {
+        resultBox.innerHTML = "<h3 class='error'>⚠️ Nevybraný súbor!</h3>";
+        resultBox.classList.add("error");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      formData.append("language", lang);
+
+      try {
+        const response = await fetch("https://tvoja-api-adresa/api/ocr/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const text = await response.text();
+
+        if (!response.ok) {
+          resultBox.innerHTML = `<h3 class="error">❌ Chyba pri OCR:</h3><p>${text}</p>`;
+          resultBox.classList.add("error");
+        } else {
+          resultBox.innerHTML = `<h3>✅ Výsledok OCR:</h3><pre>${text}</pre>`;
+        }
+      } catch (e) {
+        resultBox.innerHTML = `<h3 class="error">❌ Chyba pri odoslaní:</h3><p>${e.message}</p>`;
+        resultBox.classList.add("error");
+      }
+    }
+  </script>
+</body>
+</html>
