@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6240ec51-0ab6-4dfc-87a8-1500351296b3" name="Changes" comment="Initial commit - OCR backend ready.">
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/Procfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/trigger.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="6240ec51-0ab6-4dfc-87a8-1500351296b3" name="Changes" comment="Initial commit - OCR backend ready." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
