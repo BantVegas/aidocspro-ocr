@@ -11,12 +11,15 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/ocr")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // Povolenie pre frontend (napr. z Vercelu)
 public class OcrController {
 
     @Autowired
     private OcrService ocrService;
 
+    /**
+     * POST /api/ocr – Hlavný endpoint pre vykonanie OCR
+     */
     @PostMapping
     public ResponseEntity<?> handleOcr(
             @RequestParam("file") MultipartFile file,
@@ -31,13 +34,17 @@ public class OcrController {
             return ResponseEntity.ok(result);
 
         } catch (TesseractException e) {
+            System.err.println("OCR chyba: " + e.getMessage());
             return ResponseEntity.internalServerError().body("Chyba pri OCR: " + e.getMessage());
         } catch (IOException e) {
+            System.err.println("IO chyba: " + e.getMessage());
             return ResponseEntity.internalServerError().body("Chyba pri spracovaní súboru: " + e.getMessage());
         }
     }
 
-    // ✅ Test endpoint pre GET
+    /**
+     * GET /api/ocr/test – Testovací endpoint pre overenie funkčnosti
+     */
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("OCR backend beží správne ✅");
