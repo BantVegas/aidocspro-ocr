@@ -1,3 +1,17 @@
-# Default ignored files
-/shelf/
-/workspace.xml
+# Maven build output
+target/
+*.jar
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# OCR modely
+src/main/resources/tessdata/*.traineddata
+
+# Logy a OS veci
+*.log
+.DS_Store
+Thumbs.db
