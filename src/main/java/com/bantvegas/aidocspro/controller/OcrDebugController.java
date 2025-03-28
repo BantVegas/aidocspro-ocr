@@ -1,6 +1,7 @@
 package com.bantvegas.aidocspro.controller;
 
-import net.sourceforge.tess4j.Tesseract;
+import com.bantvegas.aidocspro.service.TesseractDataPathProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,13 +12,12 @@ import java.io.File;
 @CrossOrigin(origins = "*")
 public class OcrDebugController {
 
+    @Autowired
+    private TesseractDataPathProvider dataPathProvider;
+
     @GetMapping("/debug")
     public ResponseEntity<String> debug() {
-        Tesseract tesseract = new Tesseract();
-
-        // Tessdata path – uprav podľa potreby
-        String tessdataPath = "/app/tessdata";
-        tesseract.setDatapath(tessdataPath);
+        String tessdataPath = dataPathProvider.getTessdataPath();
 
         StringBuilder sb = new StringBuilder();
         sb.append("✅ OCR Debug Info\n");
@@ -27,12 +27,12 @@ public class OcrDebugController {
         if (tessdataDir.exists() && tessdataDir.isDirectory()) {
             sb.append("Obsah tessdata:\n");
             File[] files = tessdataDir.listFiles();
-            if (files != null) {
+            if (files != null && files.length > 0) {
                 for (File f : files) {
                     sb.append(" - ").append(f.getName()).append("\n");
                 }
             } else {
-                sb.append("⚠️ Žiadne súbory\n");
+                sb.append("⚠️ Tessdata priečinok je prázdny\n");
             }
         } else {
             sb.append("❌ Tessdata priečinok neexistuje!\n");
