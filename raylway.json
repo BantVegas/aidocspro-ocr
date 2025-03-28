@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "JAVA_VERSION": "21"
+    }
+  },
+  "deploy": {
+    "startCommand": "java -jar target/aidocspro-ocr-backend-1.0.0.jar"
+  }
+}
