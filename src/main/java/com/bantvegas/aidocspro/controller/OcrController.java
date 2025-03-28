@@ -26,19 +26,16 @@ public class OcrController {
             @RequestParam("language") String language) {
 
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Prázdny súbor.");
+            return ResponseEntity.badRequest().body("❌ Prázdny súbor.");
         }
 
         try {
             String result = ocrService.performOcr(file, language);
             return ResponseEntity.ok(result);
 
-        } catch (TesseractException e) {
-            System.err.println("OCR chyba: " + e.getMessage());
-            return ResponseEntity.internalServerError().body("Chyba pri OCR: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("IO chyba: " + e.getMessage());
-            return ResponseEntity.internalServerError().body("Chyba pri spracovaní súboru: " + e.getMessage());
+        } catch (TesseractException | IOException e) {
+            e.printStackTrace(); // ⚠️ Pomôže nám odhaliť chybu v logoch
+            return ResponseEntity.internalServerError().body("❌ Chyba pri OCR: " + e.getMessage());
         }
     }
 
@@ -47,6 +44,6 @@ public class OcrController {
      */
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("OCR backend beží správne ✅");
+        return ResponseEntity.ok("✅ OCR backend beží správne");
     }
 }
