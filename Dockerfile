@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./mvnw clean install -DskipTests
+RUN apt-get update && apt-get install -y maven
+
+RUN mvn clean install -DskipTests
 
 CMD ["java", "-jar", "target/aidocspro-ocr-backend-1.0.0.jar"]
