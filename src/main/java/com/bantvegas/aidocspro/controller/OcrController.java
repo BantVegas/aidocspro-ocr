@@ -36,4 +36,10 @@ public class OcrController {
             return ResponseEntity.internalServerError().body("Chyba pri spracovaní súboru: " + e.getMessage());
         }
     }
+
+    // ✅ Test endpoint pre GET
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("OCR backend beží správne ✅");
+    }
 }
