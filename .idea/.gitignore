@@ -1,17 +1,17 @@
-# Maven build output
-target/
-*.jar
-*.class
+# Build files
+/target/
 
-# IntelliJ IDEA
+# IDE
 .idea/
+.vscode/
 *.iml
-out/
 
-# OCR modely
-src/main/resources/tessdata/*.traineddata
-
-# Logy a OS veci
-*.log
+# OS systémové súbory
 .DS_Store
 Thumbs.db
+
+# Veľké OCR súbory – nechceme ich pushovať na GitHub
+src/main/resources/tessdata/osd.traineddata
+src/main/resources/tessdata/equ.traineddata
+src/main/resources/tessdata/chi_sim.traineddata
+
