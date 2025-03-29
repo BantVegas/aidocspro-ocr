@@ -1,3 +1,4 @@
+com\bantvegas\aidocspro\util\ImageConverter.class
 com\bantvegas\aidocspro\service\TesseractDataPathProvider.class
 com\bantvegas\aidocspro\service\PdfExportService.class
 com\bantvegas\aidocspro\CorsConfig.class
