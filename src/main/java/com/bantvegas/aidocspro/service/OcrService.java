@@ -17,26 +17,26 @@ public class OcrService {
     private TesseractDataPathProvider tessdataPathProvider;
 
     public String performOcr(MultipartFile file, String language) throws IOException, TesseractException {
-        // Ulož súbor do dočasného súboru
         File tempFile = File.createTempFile("ocr-upload-", ".tmp");
         file.transferTo(tempFile);
 
         try {
-            // Konverzia do bežného formátu
             File safeImage = ImageConverter.convertToStandardImageFormat(tempFile);
 
             Tesseract tesseract = new Tesseract();
             tesseract.setDatapath(tessdataPathProvider.getTessdataPath());
             tesseract.setLanguage(language);
 
-            System.out.println("🧠 Spúšťam OCR nad súborom: " + safeImage.getAbsolutePath());
+            System.out.println("🧠 OCR nad: " + safeImage.getAbsolutePath());
             return tesseract.doOCR(safeImage);
 
         } catch (Exception e) {
-            System.err.println("❌ Výnimka počas OCR: " + e.getClass().getSimpleName() + " – " + e.getMessage());
-            throw e;
+            System.err.println("❌ CHYBA: " + e.getClass().getSimpleName() + " – " + e.getMessage());
+            e.printStackTrace();
+            // hodiť naspäť pre ResponseEntity
+            throw new TesseractException("OCR zlyhalo: " + e.getMessage());
         } finally {
-            tempFile.delete(); // vymaž pôvodný upload
+            tempFile.delete(); // vždy uprac
         }
     }
 }
