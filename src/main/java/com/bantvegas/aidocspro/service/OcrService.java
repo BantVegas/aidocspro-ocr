@@ -2,6 +2,7 @@ package com.bantvegas.aidocspro.service;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,31 +12,27 @@ import java.io.IOException;
 @Service
 public class OcrService {
 
-    private final TesseractDataPathProvider dataPathProvider;
-
-    public OcrService(TesseractDataPathProvider dataPathProvider) {
-        this.dataPathProvider = dataPathProvider;
-    }
+    @Autowired
+    private TesseractDataPathProvider tessdataPathProvider;
 
     public String performOcr(MultipartFile file, String language) throws IOException, TesseractException {
-        System.out.println(">>> Spúšťam OCR");
-        System.out.println(">>> Jazyk: " + language);
-        System.out.println(">>> Názov súboru: " + file.getOriginalFilename());
-
-        File tempFile = File.createTempFile("ocr_", "_" + file.getOriginalFilename());
+        File tempFile = File.createTempFile("ocr-upload-", ".tmp");
         file.transferTo(tempFile);
 
-        Tesseract tesseract = new Tesseract();
-        tesseract.setLanguage(language);
-        tesseract.setDatapath(dataPathProvider.getTessdataPath());
-
         try {
-            String result = tesseract.doOCR(tempFile);
-            System.out.println(">>> OCR úspešné");
-            return result;
-        } catch (TesseractException e) {
-            System.err.println("❌ Chyba OCR: " + e.getMessage());
+            Tesseract tesseract = new Tesseract();
+            tesseract.setDatapath(tessdataPathProvider.getTessdataPath());
+            tesseract.setLanguage(language);
+
+            System.out.println("🧠 Spúšťam OCR nad súborom: " + tempFile.getAbsolutePath());
+            return tesseract.doOCR(tempFile);
+
+        } catch (Exception e) {
+            System.err.println("❌ Chyba počas OCR: " + e.getClass().getSimpleName() + " – " + e.getMessage());
+            e.printStackTrace();
             throw e;
+        } finally {
+            tempFile.delete(); // uprace dočasný súbor
         }
     }
 }
