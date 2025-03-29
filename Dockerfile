@@ -1,14 +1,6 @@
-# Stage 1: build
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /build
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-# Stage 2: run
 FROM eclipse-temurin:21-jdk
 
-# Inštalácia Tesseract
+# Inštaluj tesseract
 RUN apt-get update && \
     apt-get install -y tesseract-ocr && \
     apt-get clean && \
@@ -16,7 +8,10 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY --from=build /build/target/aidocspro-ocr-backend-1.0.0.jar app.jar
+# Skopíruj JAR súbor (ten, čo si buildol cez `mvn clean package`)
+COPY target/aidocspro-ocr-backend-1.0.0.jar app.jar
+
+# Skopíruj tessdata
 COPY src/main/resources/tessdata /app/tessdata
 
 ENV TESSDATA_PREFIX=/app/tessdata
