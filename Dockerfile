@@ -1,11 +1,11 @@
+
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-COPY . .
+COPY target/aidocspro-ocr-backend-1.0.0.jar app.jar
+COPY src/main/resources/tessdata ./tessdata
 
-RUN apt-get update && apt-get install -y maven
+ENV TESSDATA_PREFIX=/app/tessdata
 
-RUN mvn clean install -DskipTests
-
-CMD ["java", "-jar", "target/aidocspro-ocr-backend-1.0.0.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
