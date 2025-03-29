@@ -1,3 +1,4 @@
+com\bantvegas\aidocspro\service\TesseractDataPathProvider.class
 com\bantvegas\aidocspro\service\PdfExportService.class
 com\bantvegas\aidocspro\CorsConfig.class
 com\bantvegas\aidocspro\AiDocsproApplication.class
@@ -7,3 +8,4 @@ com\bantvegas\aidocspro\CorsConfig$1.class
 com\bantvegas\aidocspro\dto\OcrResponse.class
 com\bantvegas\aidocspro\service\LanguageDetectorService.class
 com\bantvegas\aidocspro\controller\OcrController.class
+com\bantvegas\aidocspro\controller\OcrDebugController.class

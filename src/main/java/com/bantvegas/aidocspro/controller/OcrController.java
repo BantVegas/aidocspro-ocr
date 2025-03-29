@@ -30,12 +30,15 @@ public class OcrController {
         }
 
         try {
+            System.out.println("➡️ OCR požiadavka prijatá: " + file.getOriginalFilename() + " / " + language);
             String result = ocrService.performOcr(file, language);
             return ResponseEntity.ok(result);
 
-        } catch (TesseractException | IOException e) {
-            e.printStackTrace(); // ⚠️ Pomôže nám odhaliť chybu v logoch
-            return ResponseEntity.internalServerError().body("❌ Chyba pri OCR: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace(); // Zobrazí výnimku v Railway logoch
+            // Zobrazí výnimku aj priamo vo fronte
+            return ResponseEntity.internalServerError()
+                    .body("❌ Výnimka: " + e.getClass().getSimpleName() + " – " + e.getMessage());
         }
     }
 
